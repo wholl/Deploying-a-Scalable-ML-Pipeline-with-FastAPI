@@ -20,7 +20,8 @@ print(data_path)
 data = pd.read_csv(data_path)
 
 # TODO: split the provided data to have a train dataset and a test dataset
-# Optional enhancement, use K-fold cross validation instead of a train-test split.
+# Optional enhancement, use K-fold cross validation
+# instead of a train-test split.
 # train, test = None, None# Your code here
 train, test = train_test_split(data, test_size=0.20, random_state=23)
 
@@ -39,7 +40,7 @@ cat_features = [
 # TODO: use the process_data function provided to process the data.
 X_train, y_train, encoder, lb = process_data(
     # your code here
-    # use the train dataset 
+    # use the train dataset
     # use training=True
     # do not need to pass encoder and lb as input
 
@@ -66,15 +67,20 @@ model = train_model(X_train, y_train)
 # save the model and the encoder
 model_path = os.path.join(project_path, "model", "model.pkl")
 save_model(model, model_path)
+print(f"Model saved to {model_path}")
+
 encoder_path = os.path.join(project_path, "model", "encoder.pkl")
 save_model(encoder, encoder_path)
+print(f"Encoder saved to {encoder_path}")
 
 # load the model
 model = load_model(
     model_path
-) 
+)
+print(f"Loading model from {model_path}")
 
-# TODO: use the inference function to run the model inferences on the test dataset.
+# TODO: use the inference function to run the model
+# inferences on the test dataset.
 # preds = None # your code here
 preds = inference(model, X_test)
 
@@ -82,9 +88,10 @@ preds = inference(model, X_test)
 p, r, fb = compute_model_metrics(y_test, preds)
 print(f"Precision: {p:.4f} | Recall: {r:.4f} | F1: {fb:.4f}")
 
-# TODO: compute the performance on model slices using the performance_on_categorical_slice function
+# TODO: compute the performance on model slices using
+# the performance_on_categorical_slice function
 
-open("slice_output.txt", "w").close() # clear output file to avoid dupes
+open("slice_output.txt", "w").close()  # clear output file to avoid dupes
 
 # iterate through the categorical features
 for col in cat_features:
@@ -101,8 +108,11 @@ for col in cat_features:
             "salary",
             encoder,
             lb,
-            model,            
+            model,
         )
         with open("slice_output.txt", "a") as f:
             print(f"{col}: {slicevalue}, Count: {count:,}", file=f)
-            print(f"Precision: {p:.4f} | Recall: {r:.4f} | F1: {fb:.4f}", file=f)
+            print(
+                f"Precision: {p:.4f} | Recall: {r:.4f} | F1: {fb:.4f}",
+                file=f
+            )
